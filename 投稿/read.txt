@@ -1,0 +1,2 @@
+readme1.doc    硬盘锁的说名
+readme2.doc    TSR 时钟的说明

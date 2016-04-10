@@ -1,0 +1,25 @@
+<IFRAME WIDTH=468 HEIGHT=60 MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FR
+AMEBORDER=0 SCROLLING=no BORDERCOLOR="#000000" SRC="http://202.106.168.86/html.ng/site=go.163.com&category=main&type=banner"
+>
+<SCRIPT LANGUAGE="JavaScript1.1" SRC="http://202.106.168.86/js.ng/Params.richmedia=yes&site=go.163.com&category=main&type=banner"
+></SCRIPT>
+<NOSCRIPT>
+<A HREF="http://202.106.168.86/click.ng/Params.richmedia=yes&site=go.163.com&category=main&type=banner"
+ target=_blank>
+<IMG SRC=http://202.106.168.86/image.ng/Params.richmedia=yes&site=go.163.com&category=main&type=banner>;
+</A>
+</NOSCRIPT>
+</IFRAME>
+
+
+
+<img SRC="http://mcgi.163.com/cgi-bin/Count.cgi?ft=6&;frgb=255;215;0&d
+d=A|df=zbin" NOSAVE BORDER=0 HEIGHT=26 WIDTH=96>
+        
+        
+
+13.您的留言簿
+你可以在
+网易个性论坛: http://luntan.163.com
+里申请属于你自己的留言簿（论坛）。
+

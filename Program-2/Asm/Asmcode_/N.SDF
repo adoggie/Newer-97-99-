@@ -1,0 +1,79 @@
+
+                  ฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+                          SOURCER DEFINITION FILE
+                  ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+
+ ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ Section 1: CONTROL INFORMATION   ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+
+Analysis Options = a b c d e f g h i j k l m n o p Q R S t u v w x y z
+2nd Options page = a b c d e f g h i j k l m
+uP               = 8088
+File format      = lst
+Keep segments    = Def
+Label type       = Decimal
+Remarks          = All
+Segment display  = Hex
+Target Assembler = NONE
+Input filename   = n.com
+Code style       = Com
+Drive (output)   = D
+Output filename  = n.lst
+Passes           = 5
+Xref             = ON
+
+
+
+ ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ Section 2: RANGE DEFINITION      ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+
+ ออออ Segments ออออออออออออออออออออออออออ
+
+  begin       end        default     seg   seg                           seg
+ seg:off      off      ds      es    type  size                         value
+ -------      ----   ------  ------  ----- -----                        -----
+seg_a:0100    02FF   seg_a   seg_a   auto  use16                       ; 944F
+
+ ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ Section 3: REFERENCE DEFINITIONS ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+
+ ออออ Subroutines อออออออออออออออออออออออ
+  seg:off    type & options	labels & comments
+  -------    --------------	----------------------------------------------
+seg_a:01E0   sub			        ; sub_1
+
+ ออออ Locations อออออออออออออออออออออออออ
+  seg:off    type & options	labels & comments
+  -------    --------------	----------------------------------------------
+seg_a:0100   loc, far		start
+seg_a:010D   forced, od 0000
+seg_a:0110   forced, od 0000
+seg_a:0120   loc			        ; locloop_1
+seg_a:012D   loc			        ; loc_2
+seg_a:0131   loc			        ; loc_3
+seg_a:013B   forced, od seg_a
+seg_a:013B   loc			        ; loc_4
+seg_a:013E   loc			        ; loc_5
+seg_a:013F   loc			        ; loc_6
+seg_a:014B   loc			        ; loc_7
+seg_a:014D   loc			        ; loc_8
+seg_a:0165   loc			        ; loc_9
+seg_a:016B   loc			        ; loc_10
+seg_a:0176   forced, od seg_a
+seg_a:018C   loc			        ; loc_11
+seg_a:018F   loc			        ; loc_12
+seg_a:0192   loc			        ; loc_13
+seg_a:01A1   loc			        ; loc_14
+seg_a:01A6   loc			        ; loc_15
+seg_a:01B8   loc			        ; loc_16
+seg_a:01D1   loc			        ; loc_17
+seg_a:0201   loc			        ; locloop_18
+seg_a:0205   loc			        ; loc_19
+seg_a:020B   loc			        ; loc_20
+
+ ออออ Data Items ออออออออออออออออออออออออ
+  seg:off    type & options	labels & comments
+  -------    --------------	----------------------------------------------
+0000:061B    db, equ			        ; data_1e
+0000:7C1B    db, equ			        ; data_2e
+944F:06A1    dw, equ			        ; data_6e
+944F:0710    db, equ			        ; data_7e
+944F:7DFE    dw, equ			        ; data_8e
+944F:AA55    db, equ			        ; data_9e

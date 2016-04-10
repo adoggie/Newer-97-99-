@@ -1,0 +1,196 @@
+
+//========= 从当前目录中将文件类型str的文件名调入到列表框中 box
+void LoadProjects(TComboBox *box,AnsiString str)
+{
+        //AnsiString str="\\*.prj";
+       // GetCurrentDir();
+        TSearchRec sr;
+        if(!FindFirst(GetCurrentDir() + str,faAnyFile,sr))
+        {
+        box->Items->Add(sr.Name);
+        }
+        while(!FindNext(sr))
+        {
+        box->Items->Add(sr. Name);
+
+        }
+        FindClose(sr);
+
+
+}
+// ========2000-5-29
+//=====================
+
+//================================
+//======= 2000-05-31
+//设置"连接到"窗体的EDIT控件中的字符串,设置为密码形式
+{
+HWND hwnd=FindWindow(0,"连接到");
+if(!hwnd)
+{ShowMessage("no found!");return;}
+
+HWND h1;
+h1=GetWindow(hwnd,GW_CHILD);
+int style;
+int inc=0;
+while(h1)
+{
+ style=GetWindowLong(h1,GWL_STYLE);
+ if( style==0x50010080)
+ { ++inc;
+ //ShowMessage("find it");
+ if(inc==1)
+ { SendMessage(h1,EM_SETPASSWORDCHAR,'@',0);
+ BringWindowToTop(hwnd);
+ SendMessage(h1,WM_SETTEXT,0,(long)"1234567");}
+ SendMessage(h1,WM_SETTEXT,0,(long)"1234567");
+      }
+
+   if( style==0x500100a0)
+  {
+   SendMessage(h1,WM_SETTEXT,0,(long)"7777777");
+
+  }
+
+
+ h1=GetWindow(h1,GW_HWNDNEXT);
+// SetWindowLong(
+
+}
+
+
+//========================================
+/*========================
+        系统类的一些函数
+==========================      */
+
+        typedef enum {ON=0,OFF=1} STATUS;
+        typedef int STARTMODE;
+// {EWX_FORCE=4, /*关闭所有程序并以其他用户身份登录*/
+ //             EWX_LOGOFF=0, //重新启动计算机并切换到MS-DOS方式
+ //             EWX_REBOOT=2, //重新启动计算机
+  //            EWX_SHUTDOWN=1 //关闭计算机
+  //            } STARTMODE;
+
+//运行时给How赋值，让他等于EWX_SHUTDOWN或其他，调用以下语句
+//ExitWindowsEx(How,0);
+
+
+class tInfo{
+public:
+        //设置系统键是否可用，如 alt+ctrl+del 等
+        static bool SystemKey(STATUS st);
+        //关闭、从新登陆、重起计算机
+        bool RebootComputer(STARTMODE sm){ExitWindowsEx(sm,0);return true;}
+        //判断当前鼠标是否在某控件的上方
+        static bool IsCursorInControl(/*HWND parent,*/ TWinControl *control);
+        };
+
+
+
+bool tInfo::SystemKey(STATUS st)
+{
+//int temp;
+        switch(st)
+        {
+        case OFF:
+        SystemParametersInfo(SPI_SCREENSAVERRUNNING,1,(PVOID)0,0);
+        break;
+        case ON:
+        SystemParametersInfo(SPI_SCREENSAVERRUNNING  ,0,(PVOID)0,0);
+        break;
+        default:;
+}
+
+        return true;
+
+}
+
+
+bool tInfo::IsCursorInControl(/*HWND parent,*/ TWinControl *control)
+{
+        POINT pt;
+        GetCursorPos(&pt);
+        RECT rc;
+        GetWindowRect( control->Handle,&rc);
+        if(PtInRect(&rc,pt))
+        return true;
+        else
+        return false;
+}
+
+
+/*===================================
+
+     得到打印机当前设置和将系统安装的所有打印机
+     填充入下拉列表框
+
+========================================*/
+class tPrintInfo{
+        TPrinter *nPrinter;
+public:
+//--------  Set Printer of System to TComboBox
+        static bool FillPrinterToComboBox(TComboBox *box);
+//-----------  Get Pirnters
+        static   int GetPrinterCount(void);
+ };
+
+bool tPrintInfo::FillPrinterToComboBox(TComboBox *box)
+{
+         TPrinter *p=Printer();
+        if(p->Printers->Count==0)
+        {
+         ShowMessage("no printer Exist!");
+        return false;
+        }
+         box->Items->Clear();
+         box->Items=p->Printers;
+
+        return true;
+ }
+
+int tPrintInfo::GetPrinterCount(void)
+{
+        TPrinter *p=Printer();
+        return p->Printers->Count;
+}
+
+
+
+//=================================================
+//--------   将厘米转换成打印机的像素
+//     int ConvertToPixel(double space);
+//==================================================
+ int ConvertToPixel(double space)
+{
+        const float cat=2.54;
+
+        TPrinter *p=Printer();//Set Default Printer From Select List
+
+        int PrinterLogicPixel;
+        PrinterLogicPixel=GetDeviceCaps(p->Handle,LOGPIXELSX);
+
+     //   PrinterPaperWidth=GetDeviceCaps(p->Handle,PHYSICALWIDTH);
+      //  PrinterPaperHeight=GetDeviceCaps(p->Handle,PHYSICALHEIGHT);
+      return (int)PrinterLogicPixel/cat*space;
+
+
+
+ }
+
+
+//=======================================
+        得到日期 
+//=======================================
+
+
+AnsiString tDateTime::_GetDate()
+{
+  TDateTime *t=new TDateTime;
+  unsigned short    year,month,day;
+   t->CurrentDate().DecodeDate(&year,&month,&day);
+   delete t;
+  return AnsiString(year)+"年"+AnsiString(month)+ "月"+\
+  AnsiString(day)+"日"   ;
+ 
+  }

@@ -1,0 +1,15 @@
+闻怡洋 http://www.kali.com.cn/myhome/vchelp/   wyy_cq@188.net
+你好！
+小弟有些问题请教，请赐教
+1、我用c++ builder做打印程序，我有两台打印机，一台可打A3（打印机A），一台可打A4（打印机B）
+   我用API函数GETDEVICECAP（）得到打印机的物理宽度及高度都一样，用打印机A、B打
+   A4大小时完全正常，但用打印机A打比A4纸张大的范围时打印机不认宽度，它允许打印的区域
+   始终是A4纸张的大小，我百思不得其解？
+2、我想学ASP但我想，ASP是NT服务器上运行的，我没有调试的机会，是否可以在单机上进行调试，请告诉我方法好吗？
+3、请问我安装了NT4.0（sp5)和SQL-SERVER7.0之后，在另外一台计算上安装WIN98，
+   为何WIN98计算机能共享访问NT计算机，而NT计算机却找不到WIN98计算机？
+   在WIN98上安装SQL-SERVER7.0客户部件之后，不能访问NT上SQL-SERVER管理的数据库？
+   我现在编程语言为C++BUILDER4.0，怎么配置，或采取何种方法能访问SQL-SERVER数据？（通过网络）
+                             
+                                                 shanghai            zbin  
+                                                                zbpost@371.net

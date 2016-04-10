@@ -1,0 +1,8 @@
+G="ZG"+ALLT(STR(MONTH(DATE())))
+USE &G
+modi stru
+?G
+APPEN BLANK
+x="1234"
+*REPL GH WITH GH
+REPL xm WITH x

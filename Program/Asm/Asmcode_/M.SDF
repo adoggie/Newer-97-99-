@@ -1,0 +1,49 @@
+
+                  ฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿฿
+                          SOURCER DEFINITION FILE
+                  ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+
+ ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ Section 1: CONTROL INFORMATION   ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+
+Analysis Options = a b c d e f g h i j k l m n o p Q R S t u v w x y z
+2nd Options page = a b c d e f g h i j k l m
+uP               = 8088
+File format      = lst
+Keep segments    = Def
+Label type       = Decimal
+Remarks          = All
+Segment display  = Hex
+Target Assembler = NONE
+Input filename   = d:\asmcode\m.com
+Code style       = Com
+Header           =  33  C0  8E	D0  BC	00  7C  FB
+Drive (output)   = D
+Output filename  = m.lst
+Passes           = 5
+Xref             = ON
+
+
+
+ ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ Section 2: RANGE DEFINITION      ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+
+ ออออ Segments ออออออออออออออออออออออออออ
+
+  begin       end        default     seg   seg                           seg
+ seg:off      off      ds      es    type  size                         value
+ -------      ----   ------  ------  ----- -----                        -----
+seg_a:0100    117F   seg_a   seg_a   auto  use16                       ; 944F
+
+ ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ Section 3: REFERENCE DEFINITIONS ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑ
+
+ ออออ Subroutines อออออออออออออออออออออออ
+  seg:off    type & options	labels & comments
+  -------    --------------	----------------------------------------------
+
+ ออออ Locations อออออออออออออออออออออออออ
+  seg:off    type & options	labels & comments
+  -------    --------------	----------------------------------------------
+seg_a:0100   loc, far		start
+
+ ออออ Data Items ออออออออออออออออออออออออ
+  seg:off    type & options	labels & comments
+  -------    --------------	----------------------------------------------

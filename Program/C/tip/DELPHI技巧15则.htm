@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>DELPHI技巧15则</TITLE>
+<META content="text/html; charset=gb2312" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2614.3500" name=GENERATOR>
+<STYLE>A {
+	TEXT-DECORATION: none; TEXT-TRANSFORM: none
+}
+A:hover {
+	COLOR: #f77c02; TEXT-DECORATION: underline
+}
+</STYLE>
+
+<STYLE type=text/css>.font1 {
+	FONT-SIZE: 10.5pt; LINE-HEIGHT: 15pt; align: center
+}
+.font2 {
+	FONT-SIZE: 9pt; LINE-HEIGHT: 13pt
+}
+A {
+	COLOR: #0000ff; TEXT-DECORATION: none; TEXT-TRANSFORM: none
+}
+A:hover {
+	TEXT-DECORATION: underline
+}
+</STYLE>
+</HEAD>
+<BODY bgColor=#ffffff text=#000000>
+<P>　</P>
+<P align=center><A name=屏蔽系统功能键><SPAN 
+class=font2><STRONG>屏蔽系统功能键</STRONG></SPAN></A></P>
+<P align=left><SPAN 
+class=font2>　　当你不需要让用户按Alt+Enter、Ctrl+Alt+Del、Ctrl+Esc等功能键的时候加入以下代码：<BR>Var<BR>temp:integer;<BR>begin<BR>SystemParametersInfo(Spi_screensaverrunning,1,@temp,0);<BR>end;<BR>　　当你要恢复功能键时用以下代码：<BR>Var<BR>Temp:integer;<BR>begin<BR>SystemParametersInfo(spi_screensaverrunning,0,@temp,0);<BR>end;<BR></SPAN></P>
+<HR>
+
+<P align=center><A name=查阅可视窗口标题><SPAN 
+class=font2><STRONG>查阅可视窗口标题</STRONG></SPAN></A></P>
+<P><SPAN 
+class=font2>下面只是举出一个例子提供参考:<BR>运用API函数GetWindow()配合GetWindowText()逐一查出各视窗的标题<BR>1. 
+File | New Project 开始一个新的工程<BR>2. 在 Form1 中安排 Button 与 Memo 各一<BR>3. 在 Button1 的 
+OnClick 事件中撰写程式如下:<BR>procedure TForm1.Button1Click(Sender: 
+TObject);<BR>var<BR>　hCurrentWindow: HWnd;<BR>　szText: array[0..254] of 
+char;<BR>begin<BR>　hCurrentWindow := GetWindow(Handle, GW_HWNDFIRST);<BR>　while 
+hCurrentWindow &lt;&gt; 0 do<BR>　begin<BR>　if GetWindowText(hCurrentWindow, 
+@szText, 255)&gt;0 
+then<BR>　Memo1.Lines.Add(StrPas(@szText));<BR>　hCurrentWindow:=GetWindow(hCurrentWindow, 
+GW_HWNDNEXT);<BR>　end;<BR>end; <BR></SPAN></P>
+<HR>
+
+<P>　</P>
+<P align=center><A name=返回程序执行参数><SPAN 
+class=font2><STRONG>返回程序执行参数</STRONG></SPAN></A></P>
+<P align=left><SPAN class=font2>　　有关 Delphi 传入应用程式的命令列参数, 
+请参考以下的说明：<BR>用ParamCount函数取得命令参数的个数: <BR>呼叫 ParamStr(0), 传回执行档的档名(含路径)<BR>呼叫 
+ParamStr(n), 传回第ｎ个参数的内容<BR>procedure TForm1.FormCreate(Sender: 
+TObject);<BR>var<BR>sFileName: string;<BR>begin<BR>if ParamCount &gt; 0 then 
+begin (* 有执行参数传入 *)<BR>sFileName := ParamStr(1); (* 取得参数内容 *)<BR>if 
+FileExists(sFileName) 
+then<BR>Memo1.Lines.LoadFromFile(sFileName)<BR>else<BR>Application.MessageBox('找不到指定的档案', 
+'讯息', 48);<BR>end;<BR>end;<BR></SPAN></P>
+<HR>
+
+<P align=center><A name=转让控制权><SPAN 
+class=font2><STRONG>转让控制权</STRONG></SPAN></A></P>
+<P align=left><SPAN class=font2>　　有时由于长时间的循环语句占用了cpu的处理权，无法运行 
+其他程序，照成死循环。这时用以下命令转让控制权，让操作系统处理其他事件。<BR>Application.ProcessMessages;</SPAN></P>
+<P align=left><SPAN class=font2>相当于VB的Do events.<BR></SPAN></P>
+<HR>
+
+<P align=center><A name=关闭Windows><SPAN 
+class=font2><STRONG>关闭Windows</STRONG></SPAN></A></P>
+<P align=left><SPAN class=font2>控制WINDOWS的开关：如关闭WINDOWS，重新启动WINDOWS等, 
+ExitWindowsEx(UINT uFlags,DWORD 
+dwReserved);是实现这一功能的API函数<BR>首先定义常数<BR>const<BR>EWX_FORCE=4; 
+//关闭所有程序并以其他用户身份登录<BR>EWX_LOGOFF=0; //重新启动计算机并切换到MS-DOS方式<BR>EWX_REBOOT=2; 
+//重新启动计算机<BR>EWX_SHUTDOWN=1;//关闭计算机<BR>运行时给How赋值，让他等于EWX_SHUTDOWN或其他，调用以下语句<BR>ExitWindowsEx(How,0);<BR></SPAN></P>
+<HR>
+
+<P>　</P>
+<P align=center><A name=检测磁盘是否变化><SPAN 
+class=font2><STRONG>检测磁盘是否变化</STRONG></SPAN></A></P>
+<P align=left><SPAN class=font2>　　最简单的检查CD－ROM或是磁盘是否有过变化的方法 
+是检查其volume号码。你可以简单地运用下面的函数来返 回磁盘的volume系列号码GetDiskVolSerialID('E'), 
+函数代码如下：<BR>function 
+GetDiskVolSerialID(cDriveName:char):DWord;<BR>var<BR>dwTemp1，dwTemp2：DWord;<BR>begin<BR>GetVolumeInformation(PChar(cDriveName+':l'), 
+Nil,0,Result, dwTemp2,dwTemp2,Nil,0);<BR>end;<BR></SPAN></P>
+<HR>
+
+<P align=center><A name=鼠标击了哪一个对象><SPAN 
+class=font2><STRONG>鼠标击了哪一个对象</STRONG></SPAN></A></P>
+<P align=left><SPAN 
+class=font2>　　在Win95中，鼠标的右键起到了很大的作用，但是，由于历史的原因，对于右键的使用即使在Delphi中，也还不够有效，下面的程序可以告诉你如何知道刚才鼠标右击的对象名称。首先建立一个popmenu，然后以下的代码就可以告诉你刚才右击的对象名称：<BR>PopupMenu1.PopupComponent.ClassName<BR></SPAN></P>
+<P align=left>　</P>
+<HR>
+
+<P align=center><A name=控制INI文件几法><SPAN 
+class=font2><STRONG>控制INI文件几法</STRONG></SPAN></A></P>
+<P align=left><SPAN 
+class=font2>要利用.INI文件做程序有关数据的存储工作，就需要能读和写.INI文件，所以列了如下方法给大家参考：<BR>从.INI文件中获取字符串<BR>var<BR>strResult:pchar;<BR>begin<BR>GetPrivateProfileString(<BR>'windows', 
+// []中标题的名字<BR>'NullPort', // =号前的名字<BR>'NIL', // 
+如果没有找到字符串时，返回的默认值<BR>strResult, //存放取得字符<BR>100, 
+//取得字符的允许最大长度<BR>'c:\forwin95\win.ini' // 调用的文件名<BR>);<BR>edit1.text:=strResult; 
+//显示取得字符串<BR>从.INI文件中获取整数<BR>edit1.text:=inttostr(GetPrivateProfileInt(<BR>'intl', 
+// []中标题的名字<BR>'iCountry', // =号前的名字<BR>0,// 
+如果没有找到整数时，返回的默认值<BR>'c:\forwin95\win.ini' // 
+调用的文件名<BR>));<BR>向.INI文件写入字符串<BR>WritePrivateProfileString(<BR>'windows', // 
+[]中标题的名字<BR>'load', // 要写入“=”号前的字符串<BR>'accca', 
+//要写入的数据<BR>'c:\forwin95\win.ini' // 
+调用的文件名<BR>);<BR>向.INI文件写入整数<BR>WritePrivateProfileSection(<BR>'windows', // 
+[]中标题的名字<BR>'read=100', // 要写入的数据<BR>'c:\forwin95\win.ini' // 
+调用的文件名<BR>);<BR>上面的方法是调用API函数，下面介绍另一种不用API从.INI文件中获取字符的方法<BR>var MyIni: 
+TIniFile;<BR>begin<BR>MyIni := 
+TIniFile.Create('WIN.INI');//调用的文件名<BR>edit1.text:=MyIni.ReadString('Desktop', 
+'Wallpaper', '');//取得字符<BR>end;<BR>向.INI文件中写入字符的方法<BR>var MyIni: 
+TIniFile;<BR>begin<BR>MyIni := 
+TIniFile.Create('WIN.INI');//调用的文件名<BR>DelphiIni.WriteString('Desktop', 
+'Wallpaper', 'c:\a.bmp');<BR>end;<BR></SPAN></P>
+<P align=left>　</P>
+<HR>
+
+<P align=center><A name=防止Win95显示严重错误><SPAN 
+class=font2><STRONG>防止Win95显示严重错误</STRONG></SPAN></A></P>
+<P align=left><SPAN 
+class=font2>　　不管你的程序如何反复调试，交给用户之后，总有可能发生你意想不到的错误，如何避免Win95显示出白色的窗口，告诉你的用户发生了难堪的意外错误呢？我们可以这样做：<BR>var<BR>wOldErrorMode:Word;<BR>begin<BR>wOldErrorMode:=SetErrorMode(SEM_FAILCRITICALERRORS);<BR>try<BR>finally<BR>SetErrorMode(wOldErrorMode);<BR>end;<BR>end;<BR></SPAN></P>
+<P align=left>　</P>
+<HR>
+
+<P align=center><A name=状态条插入可视控件><SPAN 
+class=font2><STRONG>状态条插入可视控件</STRONG></SPAN></A></P>
+<P align=left><SPAN 
+class=font2>　　首先,在FROM中放置一个状态条控件Status。调节Status.Panels，在其中插入3个状态条嵌板。把第二个嵌板的参数Style设置成psOwnerDraw。这一点很重要，如果没有这样做，将永远无法显示文字以外的东西。然后在状态条的OnDrawPanel事件中插入一行StatusDrawRect:=rect;以记录参数Style设置成psOwnerDraw的嵌板的坐标。<BR>　　第二步，在FROM的Private中申明一个TProgressBar类型的变量Progress。然后在一个菜单的消息响应过程中调用Create方法把它建立起来，再设定状态条为该进程条的父窗口，进而设定进程条的一些必要参数。例如：最大值、最小值、原点坐标、高度和宽度等。<BR>　　最后编译一下该程序，你就会发现在状态条中被插入了一个运动着的进程条。<BR>　　类似地，你还可以在状态条中插入其他可视控件，如：按键、位图和动画控件等等。<BR>以下是范例程序：<BR>type<BR>TForm1 
+= class(TForm)//定义一个窗口类<BR>Status: TStatusBar;<BR>MainMenu1: 
+TMainMenu;<BR>file1: TMenuItem;<BR>insertprocressbar1: TMenuItem;<BR>N1: 
+TMenuItem;<BR>exit1: TMenuItem;<BR>procedure FormCreate(Sender: 
+TObject);<BR>procedure StatusDrawPanel(StatusBar: TStatusBar; Panel: 
+<BR>TStatusPanel;const Rect: TRect);<BR>procedure FormDestroy(Sender: 
+TObject);<BR>procedure exit1Click(Sender: TObject);<BR>procedure 
+insertprocressbar1Click(Sender: TObject);<BR>private<BR>colorindex : integer; 
+BookOpen:Boolean;<BR>ssbmp:Tbitmap; 
+progress:TProgressbar;<BR>StatusDrawRect:TRect; //记录要插入状态条特技的坐标范围<BR>public<BR>{ 
+Public declarations }<BR>end; <BR><BR>var<BR>Form1: TForm1; 
+<BR><BR>implementation <BR><BR>{$R *.DFM} <BR><BR>procedure 
+TForm1.FormCreate(Sender: TObject);<BR>begin<BR>end; <BR><BR>procedure 
+TForm1.StatusDrawPanel(StatusBar: TStatusBar;<BR>Panel: TStatusPanel; const 
+Rect: TRect);<BR>begin<BR>StatusDrawRect:=rect; 
+//记录要实现状态条特技的坐标范围<BR>end;<BR><BR>procedure TForm1.exit1Click(Sender: 
+TObject);<BR>begin<BR>close;<BR>end; <BR><BR>procedure 
+TForm1.insertprocressbar1Click(Sender: TObject);<BR>var 
+i,count:integer;<BR>staPanleWidth:integer;<BR>begin<BR>progress:=TProgressbar.create(form1);<BR>count:=3000; 
+//进程条的最大值<BR>staPanleWidth:=status.Panels.Items[2].width; 
+<BR>//由于进程条的很宽，所以需要改变状态条嵌板的宽度，这里先保存它的宽度。<BR>status.Panels.Items[2].width:=150; 
+// 改变宽度<BR>status.repaint;<BR>with progress 
+do<BR>begin<BR>top:=StatusDrawRect.top;<BR>left:=StatusDrawRect.left;<BR>width:=StatusDrawRect.right-StatusDrawRect.left;<BR>height:=StatusDrawRect.bottom-StatusDrawRect.top; 
+<BR>//设定进程条的宽度和高度<BR>visible:=true;<BR>try<BR>Parent := status; 
+//该进程条的拥有者为状态条status<BR>Min := 0; Max := Count; //进程条的最大和最小值<BR>Step := 1; 
+//进程条的步长<BR>for i := 1 to Count do<BR>Stepit; // 
+累加进程条<BR>ShowMessage('现在，进程条将要从内存中被释放');<BR>finally<BR>Free; //释放进程条<BR>end; 
+//try<BR>end; //with<BR>status.Panels.Items[2].width:=staPanleWidth; 
+//恢复状态条嵌板的宽度<BR>end; //begin <BR><BR>end. <BR></SPAN></P>
+<HR>
+
+<P align=center><A name=临时路径><SPAN 
+class=font2><STRONG>临时路径</STRONG></SPAN></A></P>
+<P align=left><SPAN 
+class=font2>有时需要Windows的临时路径来做备份等工作，那么就要知道路径在哪，下面的程序帮你忙：<BR>var 
+aa:pchar;<BR>begin<BR>GetTempPath(20,aa); 
+//返回路径名<BR>edit1.text:=aa;<BR>end;<BR></SPAN></P>
+<P align=left>　</P>
+<HR>
+
+<P align=center><A name=改计算机名><SPAN 
+class=font2><STRONG>改计算机名</STRONG></SPAN></A></P>
+<P align=left><SPAN class=font2>改变计算机在网络中的名字，重新启动后才生效<BR>SetComputerName('Hello 
+World');<BR></SPAN></P>
+<HR>
+
+<P align=center><A name=控制壁纸><SPAN 
+class=font2><STRONG>控制壁纸</STRONG></SPAN></A></P>
+<P align=left><SPAN class=font2>控制Windows 
+95的壁纸，以下程序使壁纸变为我们想要的位图，如果THEPCHAR为空，那么就取消壁纸，变为Win默认色彩； 
+但这种方法只是暂时的，在WINDOWS重新启动后还是原来的位图，这时就需要对WIN.INI文件进行写操作，才能保存住我们改动的图片不被替换。<BR>var 
+THEPCHAR:pchar;<BR>begin<BR>THEPCHAR:='e:\a.bmp';<BR>SystemParametersInfo(SPI_SETDESKWALLPAPER, 
+0, THEPCHAR, SPIF_SENDWININICHANGE)<BR>end;<BR></SPAN></P>
+<P align=left>　</P>
+<HR>
+
+<P align=center><A name=控制面板大全><SPAN 
+class=font2><STRONG>控制面板大全</STRONG></SPAN></A></P>
+<P align=left><SPAN class=font2>　　在程序运行过程中启动控制面板的各个设置功能：<BR>var 
+x:cardinal;<BR>begin<BR>{启动控制面板}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL',9);<BR>{辅助选项 属性-键盘}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL access.cpl,,1',9);<BR>{辅助选项 
+属性-声音}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+access.cpl,,2',9);<BR>{辅助选项 属性-显示}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL access.cpl,,3',9);<BR>{辅助选项 
+属性-鼠标}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+access.cpl,,4',9);<BR>{辅助选项 属性-常规}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL access.cpl,,5',9);<BR>{添加/删除程序 
+属性-安装/卸载}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Appwiz.cpl,,1',9);<BR>{添加/删除程序 属性-Windows安装程序}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Appwiz.cpl,,2',9);<BR>{添加/删除程序 
+属性-启动盘}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Appwiz.cpl,,3',9);<BR>{显示 属性-背景}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL desk.cpl,,0',9);<BR>{显示 
+属性-屏幕保护程序}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+desk.cpl,,1',9);<BR>{显示 属性-外观}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL desk.cpl,,2',9);<BR>{显示 
+属性-设置}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+desk.cpl,,3',9);<BR>{Internet 属性-常规}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Inetcpl.cpl,,0',9);<BR>{Internet 
+属性-安全}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Inetcpl.cpl,,1',9);<BR>{Internet 属性-内容}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Inetcpl.cpl,,2',9);<BR>{Internet 
+属性-连接}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Inetcpl.cpl,,3',9);<BR>{Internet 属性-程序}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Inetcpl.cpl,,4',9);<BR>{Internet 
+属性-高级}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Inetcpl.cpl,,5',9);<BR>{区域设置 属性-区域设置}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Intl.cpl,,0',9);<BR>{区域设置 
+属性-数字}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Intl.cpl,,1',9);<BR>{区域设置 属性-货币}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Intl.cpl,,2',9);<BR>{区域设置 
+属性-时间}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Intl.cpl,,3',9);<BR>{区域设置 属性-日期}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL 
+Intl.cpl,,4',9);<BR>{游戏控制器-一般}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL 
+Joy.cpl,,0',9);<BR>{游戏控制器-高级}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Joy.cpl,,1',9);<BR>{鼠标 
+属性}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL Main.cpl',9);<BR>{多媒体 
+属性-音频}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Mmsys.cpl,,0',9);<BR>{多媒体 属性-视频}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Mmsys.cpl,,1',9);<BR>{多媒体 
+属性-MIDI}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Mmsys.cpl,,2',9);<BR>{多媒体 属性-CD音乐}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Mmsys.cpl,,3',9);<BR>{多媒体 
+属性-设备}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Mmsys.cpl,,4',9);<BR>{调制解调器 属性}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Modem.cpl',9);<BR>{网络}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Netcpl.cpl',9);<BR>{密码 
+属性}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Password.cpl',9);<BR>{扫描仪与数字相机 属性}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Sticpl.cpl',9);<BR>{系统 
+属性-常规}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Sysdm.cpl,,0',9);<BR>{系统 属性-设备管理器}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Sysdm.cpl,,1',9);<BR>{系统 
+属性-硬件配置文件}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+Sysdm.cpl,,2',9);<BR>{系统 属性-性能}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL Sysdm.cpl,,3',9);<BR>{日期/时间 
+属性}<BR>x:=winexec('rundll32.exe shell32.dll,Control_RunDLL 
+timedate.cpl',9);<BR>{电源管理 属性}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL 
+Powercfg.cpl',9);<BR>{拨号属性}<BR>x:=winexec('rundll32.exe 
+shell32.dll,Control_RunDLL 
+Telephon.cpl',9);<BR>{----------------------调用错误----------------------}<BR>if 
+x=0 then messagebox(0,'程序超出内存','错误',0);<BR>if x=ERROR_BAD_FORMAT then 
+messagebox(0,'该程序非一个合法的Win32.EXE程序).','错误',0);<BR>if x=ERROR_FILE_NOT_FOUND then 
+messagebox(0,'指定文件没找到','错误',0);<BR>if x=ERROR_PATH_NOT_FOUND then 
+messagebox(0,'指定路径没找到','错误',0);<BR>end;<BR></SPAN></P>
+<P align=left>　</P>
+<HR>
+
+<P align=center><A name=检测程序是否运行><SPAN 
+class=font2><STRONG>检测程序是否运行</STRONG></SPAN></A></P>
+<P align=left><SPAN 
+class=font2>　　在某些情况下，我们编写的应用程序同时只能有一个实例在内存中运行，例如服务器程序、需要独占某设备的程序，甚至我们仅仅是让程序同时只有一个实例运行（如UltraEdit就是这样做的，让你不能同时运行多个UltraEdit）。要实现此功能，需要在程序中加一点判断的代码，在Windows 
+95或Win32环境下的Delphi版本中实现的程序如下：<BR>按Ctrl+F12键，选择Project1，加入下列语句<BR>program 
+Project1;<BR><BR>uses<BR>windows, {加入该句才能调用函数}<BR>Forms,<BR>Unit1 in 
+'Unit1.pas'{Form1};<BR><BR>{$R *.RES}<BR>const classname='TForm1'; 
+{声明为主窗体的类名}<BR>var handle:integer; 
+{变量}<BR><BR>begin<BR>{-----------------主要为该判断部分----------------------}<BR>handle:=findwindow(classname,nil);{查找是否有此类的窗体}<BR>if 
+handle&lt;&gt;0 then 
+{不为0则程序已运行}<BR>begin<BR>messagebox(0,'该程序已经有一个在运行中！','运行',0);{提示程序已运行}<BR>halt; 
+{退出程序}<BR>end;<BR>{------------------------------------------------------}<BR>Application.Initialize;<BR>Application.CreateForm(TForm1, 
+Form1);<BR>Application.Run;<BR>end.<BR>　　该程序在测试时由于Delphi也生成了此类实例窗体，所以会出现提示框，只有关闭Delphi后单独运行程序才能实现。</SPAN></P>
+<P align=left><SPAN class=font2>　　</SPAN></P>
+<HR>
+
+<P><SPAN class=font2>(转载于“学程序来旋风”)</SPAN></P></BODY></HTML>

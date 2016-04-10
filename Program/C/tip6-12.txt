@@ -1,0 +1,5 @@
+
+要改变窗体创建时的风格，可以重载TForm::CreateParams()函数，
+它的参数就是CreateWindowEx中的类结构
+1、Builder中Form的风格中选择无标题条风格时，窗体没有边框（border），可在CreateParams()
+   中改变风格加上WS_POPUP，去掉WS_DLGFRAME风格。

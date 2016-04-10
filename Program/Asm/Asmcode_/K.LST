@@ -1,0 +1,920 @@
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-1
+
+
+				   ;        £»98'     ÕÅ±ó 
+ 0000				     code segment 
+				     assume cs:code,ds:code,es:code 
+				     
+ 0000				 first: 
+ 0000  8C D8			               mov ax,ds 
+ 0002  A3 08D0 R		                   mov old_ds,ax 
+ 0005  B5 00			               mov ch,0 
+ 0007  26: 8A 0E 0080		               mov cl,byte ptr es:[80h] 
+ 000C  BE 0081			                mov si,81h 
+				                
+ 000F  AC			           loop1:    lodsb 
+ 0010  3C 23			                    cmp al,'#' 
+ 0012  74 05			                    je m1 
+ 0014  E2 F9			                     loop loop1 
+ 0016  E9 00B2 R		                    jmp begin 
+ 0019				                  m1: 
+ 0019  AC			                     lodsb 
+ 001A  3C 75			                  cmp al,'u' 
+ 001C  75 4A			                    jne t1 
+				 
+ 001E				                 t2: 
+ 001E  8C C8			                     mov ax,cs 
+ 0020  8E C0			                     mov es,ax 
+ 0022  B8 00C9			                     mov ax,201 
+ 0025  BB 06BC R		                     mov bx,offset buf 
+ 0028  B9 0013			                     mov cx,13h 
+ 002B  BA 0080			                     mov dx,80h 
+ 002E  CD 13			                     int 13h 
+ 0030  2E: 80 3E 08B9 R 42	                      cmp byte ptr cs:[buf+1fdh
+				],'B' 
+ 0036  74 0F			                      je t3 
+				                   
+ 0038  8C C8			                      mov ax,cs 
+ 003A  8E D8			                      mov ds,ax 
+ 003C  8D 16 0975 R		                      lea dx,msg3 
+ 0040  B4 09			                      mov ah,9 
+ 0042  CD 21			                      int 21h 
+ 0044  E9 069E R		                      jmp exit 
+				 
+ 0047				                   t3: 
+ 0047  8C C8			                     mov ax,cs 
+ 0049  8E C0			                     mov es,ax 
+ 004B  B8 0301			                   mov ax,301h 
+ 004E  BB 06BC R		                      mov bx,offset buf 
+ 0051  B9 0001			                      mov cx,01h 
+ 0054  BA 0080			                      mov dx,80h 
+ 0057  CD 13			                      int 13h 
+				 
+ 0059  8C C8			                      mov ax,cs 
+ 005B  8E D8			                      mov ds,ax 
+ 005D  8D 16 09B9 R		                      lea dx,msg4 
+ 0061  B4 09			                      mov ah,9 
+ 0063  CD 21			                      int 21h 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-2
+
+
+ 0065  E9 069E R		                      jmp exit 
+				                       
+				 
+ 0068  3C 55			                 t1:  cmp al,'U' 
+ 006A  74 B2			                     je t2 
+				               ;********************** 
+ 006C  8C C8			                   mov ax,cs 
+ 006E  8E C0			                   mov es,ax 
+ 0070  BB 06BC R		                   mov bx,offset buf 
+ 0073  B8 0201			                   mov ax,201h 
+ 0076  B9 0021			                   mov cx,21h 
+ 0079  BA 0080			                   mov dx,80h 
+ 007C  CD 13			                   int 13h 
+				                   
+ 007E  8B 3E 079E R		                   mov di, buf+226 
+hdd3.ASM(68): warning A4031: Operand types must match
+				                    
+ 0082  2E: C7 06 079C R 0000	                   mov word ptr cs:[buf+224],0 
+ 0089  3C 70			                  cmp al,'p' 
+ 008B  75 1E			                  jne p1 
+				 
+ 008D  AC			                p2: lodsb 
+ 008E  3C 0D			                   cmp al,0dh 
+ 0090  74 08			                   je p3 
+ 0092  AA			                   stosb 
+ 0093  2E: FF 06 079C R		                   inc word ptr cs:[buf+224] 
+ 0098  EB F3			                   jmp p2 
+				 
+ 009A  B8 012D			                p3: mov ax,301 
+ 009D  BB 06BC R		                mov bx,offset buf 
+ 00A0  B9 0021			                mov cx,21h 
+ 00A3  BA 0080			                mov dx,80h 
+ 00A6  CD 13			                int 13h 
+ 00A8  E9 069E R		                jmp exit 
+				 
+ 00AB  3C 50			                p1:  cmp al,'P' 
+ 00AD  74 DE			                   je p2 
+ 00AF  E9 069E R		                   jmp exit 
+				 
+				 
+ 00B2				             begin: 
+ 00B2  B8 ---- R		                mov ax,code 
+ 00B5  8E D8			                mov ds,ax 
+ 00B7  8E C0			                mov es,ax 
+ 00B9  E9 064B R		                jmp second 
+				;**************************  ³ÌÐòËµÃ÷ 
+ 00BC  08 1D F1 11 11 FD 11	cpp  db  008h,01dh,0f1h,011h,011h,0fdh,011h,038
+				h,035h,054h,050h,091h,010h,010h,017h,010h 
+       38 35 54 50 91 10 10	
+       17 10			
+ 00CC  04 FE 04 04 04 FC 04	 db  004h,0feh,004h,004h,004h,0fch,004h,000h,0f
+				ch,020h,020h,0fch,020h,020h,0feh 
+       00 FC 20 20 FC 20 20	
+       FE			
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-3
+
+
+ 00DB  00 01 00 3F 20 2F 20	 db  000h,001h,000h,03fh,020h,02fh,020h,021h,02
+				0h,02fh,020h,020h,020h,040h,040h 
+       21 20 2F 20 20 20 40	
+       40			
+ 00EA  82 01 00 88 FC 00 F8	 db  082h,001h,000h,088h,0fch,000h,0f8h,020h,04
+				0h,080h,0fch,088h,090h,080h,080h 
+       20 40 80 FC 88 90 80	
+       80			
+ 00F9  80 80 00 00 00 00 00	 db  080h,080h,000h,000h,000h,000h,000h,018h,01
+				8h,000h,000h,000h,018h,018h,000h 
+       18 18 00 00 00 18 18	
+       00			
+ 0108  00 00 00 00 00 00 00	 db  000h,000h,000h,000h,000h,000h,000h,000h,00
+				0h,000h,000h,000h,000h,000h,000h 
+       00 00 00 00 00 00 00	
+       00			
+ 0117  00 00 00 00 00 00 00	 db  000h,000h,000h,000h,000h,000h,000h,0feh,0c
+				6h,086h,00ch,018h,030h,060h,0c2h 
+       FE C6 86 0C 18 30 60	
+       C2			
+ 0126  C6 FE 00 00 00 00 00	 db  0c6h,0feh,000h,000h,000h,000h,000h,000h,00
+				0h,000h,000h,000h,000h,000h,000h 
+       00 00 00 00 00 00 00	
+       00			
+ 0135  00 18 18 00 00 00 00	 db  000h,018h,018h,000h,000h,000h,000h,000h,00
+				0h,0fch,066h,066h,066h,07ch,066h 
+       00 00 FC 66 66 66 7C	
+       66			
+ 0144  66 66 66 FC 00 00 00	 db  066h,066h,066h,0fch,000h,000h,000h,000h,00
+				0h,000h,018h,018h,000h,038h,018h 
+       00 00 00 18 18 00 38	
+       18			
+ 0153  18 18 18 18 3C 00 00	 db  018h,018h,018h,018h,03ch,000h,000h,000h,00
+				0h,000h,000h,000h,000h,000h,0dch 
+       00 00 00 00 00 00 00	
+       DC			
+ 0162  66 66 66 66 66 66 00	 db  066h,066h,066h,066h,066h,066h,000h,000h,00
+				0h,000h,000h,000h,000h,000h,000h 
+       00 00 00 00 00 00 00	
+       00			
+ 0171  00 00 00 00 00 00 00	 db  000h,000h,000h,000h,000h,000h,000h,000h,00
+				0h,000h,000h,000h,000h,000h,000h 
+       00 00 00 00 00 00 00	
+       00			
+ 0180  00 00 00 00 00 00 00	 db  000h,000h,000h,000h,000h,000h,000h,000h,00
+				0h,000h,000h,000h,000h,000h,03ch 
+       00 00 00 00 00 00 00	
+       3C			
+ 018F  66 C2 C0 C0 C0 C0 C2	 db  066h,0c2h,0c0h,0c0h,0c0h,0c0h,0c2h,066h,03
+				ch,000h,000h,000h,000h,02eh,057h 
+       66 3C 00 00 00 00 2E	
+       57			
+ 019E  CF 6D C5 7E FE EE D7	 db  0cfh,06dh,0c5h,07eh,0feh,0eeh,0d7h,0ceh,0e
+				fh,07dh,0a2h,068h,08eh,047h,07dh 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-4
+
+
+       CE EF 7D A2 68 8E 47	
+       7D			
+ 01AD  3D 23 18 83 FF EE F7	 db  03dh,023h,018h,083h,0ffh,0eeh,0f7h,0eeh,07
+				eh,077h,0fch,066h,061h,0f3h,043h 
+       EE 7E 77 FC 66 61 F3	
+       43			
+ 01BC  45 53 53 21 72 C7 CE	 db  045h,053h,053h,021h,072h,0c7h,0ceh,0c6h,0c
+				fh,0cfh,0d7h,07eh,056h,04dh,0feh 
+       C6 CF CF D7 7E 56 4D	
+       FE			
+ 01CB  21 E4 14 FD 66 67 6E	 db  021h,0e4h,014h,0fdh,066h,067h,06eh,07dh,07
+				dh,067h,076h,06fh,0e6h,047h,046h 
+       7D 7D 67 76 6F E6 47	
+       46			
+ 01DA  47 45 54 50 5F 5B 21	 db  047h,045h,054h,050h,05fh,05bh,021h,03ah,01
+				eh,018h,05dh,05eh,05fh,07ch,045h 
+       3A 1E 18 5D 5E 5F 7C	
+       45			
+ 01E9  4E 21 7B 01 00 45 46	 db  04eh,021h,07bh,001h,000h,045h,046h,050h,07
+				7h,0dch,0dfh,0edh,0fch,0ceh,07ch 
+       50 77 DC DF ED FC CE	
+       7C			
+ 01F8  4E CF 7D 54 46 41 F4	 db  04eh,0cfh,07dh,054h,046h,041h,0f4h,061h,0e
+				5h,06fh,076h,067h,076h,076h,067h 
+       61 E5 6F 76 67 76 76	
+       67			
+ 0207  FE 54 21 08 0C 45 53	 db  0feh,054h,021h,008h,00ch,045h,053h,053h,07
+				fh,070h,0fdh,031h,033h,03fh,030h 
+       53 7F 70 FD 31 33 3F	
+       30			
+ 0216  36 5F 43 4F 50 59 40	 db  036h,05fh,043h,04fh,050h,059h,040h,023h,00
+				fh,000h,047h,053h,045h,047h,052h 
+       23 0F 00 47 53 45 47	
+       52			
+ 0225  45 41 44 21 BF 0F 00	 db  045h,041h,044h,021h,0bfh,00fh,000h,046h,05
+				3h,0d6h,0c7h,0d7h,0ceh,0ceh,0e7h 
+       46 53 D6 C7 D7 CE CE	
+       E7			
+ 0234  DE 7C 7D 53 54 49 4D	 db  0deh,07ch,07dh,053h,054h,049h,04dh,045h,02
+				1h,05eh,011h,000h,047h,07fh,0d6h 
+       45 21 5E 11 00 47 7F	
+       D6			
+ 0243  FE C9 C3 CF 7C 21 B6	 db  0feh,0c9h,0c3h,0cfh,07ch,021h,0b6h,011h,00
+				0h,046h,053h,054h,052h,04ch,0ddh 
+       11 00 46 53 54 52 4C	
+       DD			
+ 0252  7E 67 ED 63 68 FF 5F	 db  07eh,067h,0edh,063h,068h,0ffh,05fh,04dh,04
+				bh,04eh,041h,04dh,045h,0afh,003h 
+       4D 4B 4E 41 4D 45 AF	
+       03			
+ 0261  00 06 5F 5F 5F 62 72	 db  000h,006h,05fh,05fh,05fh,062h,072h,06bh,0f
+				3h,000h,000h,008h,05fh,05fh,07fh 
+       6B F3 00 00 08 5F 5F	
+       7F			
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-5
+
+
+ 0270  7A 7F 7E 7D 7A DB 18	 db  07ah,07fh,07eh,07dh,07ah,0dbh,018h,07eh,00
+				7h,05fh,05fh,05fh,073h,062h,072h 
+       7E 07 5F 5F 5F 73 62	
+       72			
+ 027F  6B F3 00 07 5F 5F 72	 db  06bh,0f3h,000h,007h,05fh,05fh,072h,07fh,07
+				eh,065h,072h,081h,000h,009h,05fh 
+       7F 7E 65 72 81 00 09	
+       5F			
+ 028E  7A 6D EF F7 F6 FF F7	 db  07ah,06dh,0efh,0f7h,0f6h,0ffh,0f7h,0efh,0f
+				ch,03ch,006h,05fh,063h,070h,075h 
+       EF FC 3C 06 5F 63 70	
+       75			
+ 029D  74 73 68 07 00 09 5F	 db  074h,073h,068h,007h,000h,009h,05fh,063h,07
+				2h,065h,061h,074h,06eh,065h,077h 
+       63 72 65 61 74 6E 65	
+       77			
+ 02AC  13 06 7E DF E7 F6 7F	 db  013h,006h,07eh,0dfh,0e7h,0f6h,07fh,067h,07
+				6h,076h,06dh,07dh,070h,013h,006h 
+       67 76 76 6D 7D 70 13	
+       06			
+ 02BB  00 0A 5F 7E E7 F6 E7	 db  000h,00ah,05fh,07eh,0e7h,0f6h,0e7h,07dh,0e
+				eh,0eeh,0efh,0e7h,07dh,005h,000h 
+       7D EE EE EF E7 7D 05	
+       00			
+ 02CA  09 5F 66 69 6E 64 6E	 db  009h,05fh,066h,069h,06eh,064h,06eh,065h,07
+				8h,0feh,0a3h,00ah,009h,05fh,066h 
+       65 78 FE A3 0A 09 5F	
+       66			
+ 02D9  70 75 74 63 68 79 7A	 db  070h,075h,074h,063h,068h,079h,07ah,0fbh,01
+				ch,018h,05fh,07fh,07dh,07ch,07eh 
+       FB 1C 18 5F 7F 7D 7C	
+       7E			
+ 02E8  69 73 6B AF 08 00 1C	 db  069h,073h,06bh,0afh,008h,000h,01ch,07fh,07
+				fh,07dh,07ch,07ch,07dh,078h,07ch 
+       7F 7F 7D 7C 7C 7D 78	
+       7C			
+ 02F7  7F 6E 66 6F E1 13 00	 db  07fh,06eh,066h,06fh,0e1h,013h,000h,008h,05
+				fh,068h,061h,072h,0feh,065h,072h 
+       08 5F 68 61 72 FE 65	
+       72			
+ 0306  72 2F 0C 00 05 5F 69	 db  072h,02fh,00ch,000h,005h,05fh,069h,074h,07
+				fh,06dh,0ceh,0c7h,0d7h,0dfh,0efh 
+       74 7F 6D CE C7 D7 DF	
+       EF			
+ 0315  E7 6D 7B 6D 70 78 0D	 db  0e7h,06dh,07bh,06dh,070h,078h,00dh,007h,05
+				fh,0ffh,0ebh,0f4h,0e5h,0fdh,076h 
+       07 5F FF EB F4 E5 FD	
+       76			
+ 0324  9E 0F C6 7F 70 75 74	 db  09eh,00fh,0c6h,07fh,070h,075h,074h,063h,06
+				8h,062h,0d6h,0ffh,0f9h,040h,018h 
+       63 68 62 D6 FF F9 40	
+       18			
+ 0333  00 00 00 00 00 E0 FF	 db  000h,000h,000h,000h,000h,0e0h,0ffh,0c2h,04
+				1h 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-6
+
+
+       C2 41			
+				  
+				 
+				;********************ÊäÈëÆô¶¯ÃÜÂë ±£´æµ½21H ÉÈÇ
+				ø  load address 0:8200h 
+ 033C  20 20 20 FD 22 45 50	prompt1 db  020h,020h,020h,0fdh,022h,045h,050h,
+				093h,0fah,013h,03ah,0d3h,012h,012h,012h,012h 
+       93 FA 13 3A D3 12 12	
+       12 12			
+ 034C  40 A0 A0 10 0E F4 00	 db  040h,0a0h,0a0h,010h,00eh,0f4h,000h,0c4h,05
+				4h,0d4h,054h,0d4h,054h,044h,044h 
+       C4 54 D4 54 D4 54 44	
+       44			
+ 035B  CC 04 02 01 01 01 02	 db  0cch,004h,002h,001h,001h,001h,002h,002h,00
+				2h,004h,004h,008h,008h,010h,020h 
+       02 02 04 04 08 08 10	
+       20			
+ 036A  40 80 00 00 00 00 00	 db  040h,080h,000h,000h,000h,000h,000h,080h,08
+				0h,080h,040h,040h,020h,020h,010h 
+       80 80 80 40 40 20 20	
+       10			
+ 0379  10 0E 04 01 00 1F 10	 db  010h,00eh,004h,001h,000h,01fh,010h,010h,01
+				0h,01fh,010h,010h,010h,017h,024h 
+       10 10 1F 10 10 10 17	
+       24			
+ 0388  24 44 87 04 00 84 FE	 db  024h,044h,087h,004h,000h,084h,0feh,004h,00
+				4h,004h,0fch,000h,000h,004h,0feh 
+       04 04 04 FC 00 00 04	
+       FE			
+ 0397  04 04 04 FC 04 00 00	 db  004h,004h,004h,0fch,004h,000h,000h,07ch,00
+				0h,001h,0feh,010h,010h,020h,024h 
+       7C 00 01 FE 10 10 20	
+       24			
+ 03A6  42 FE 42 01 02 04 40	 db  042h,0feh,042h,001h,002h,004h,040h,040h,04
+				0h,044h,0feh,044h,044h,044h,044h 
+       40 40 44 FE 44 44 44	
+       44			
+ 03B5  44 84 84 84 04 28 10	 db  044h,084h,084h,084h,004h,028h,010h,002h,00
+				1h,07fh,042h,089h,028h,04bh,00ch 
+       02 01 7F 42 89 28 4B	
+       0C			
+ 03C4  77 01 21 21 21 21 3F	 db  077h,001h,021h,021h,021h,021h,03fh,020h,00
+				0h,000h,0feh,002h,024h,0c8h,004h 
+       20 00 00 FE 02 24 C8	
+       04			
+ 03D3  10 F0 00 08 08 08 08	 db  010h,0f0h,000h,008h,008h,008h,008h,0f8h,00
+				8h,000h,07dh,010h,011h,011h,021h 
+       F8 08 00 7D 10 11 11	
+       21			
+ 03E2  3D 65 A5 24 24 27 24	 db  03dh,065h,0a5h,024h,024h,027h,024h,03ch,02
+				4h,000h,010h,0f8h,010h,010h,010h 
+       3C 24 00 10 F8 10 10	
+       10			
+ 03F1  10 10 10 FC 04 24 F4	 db  010h,010h,010h,0fch,004h,024h,0f4h,004h,00
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-7
+
+
+				4h,014h,008h,000h,000h,000h,000h 
+       04 04 14 08 00 00 00	
+       00			
+ 0400  18 18 00 00 00 18 18	 db  018h,018h,000h,000h,000h,018h,018h,000h,00
+				0h,000h,000h,000h,000h,000h,000h 
+       00 00 00 00 00 00 00	
+       00			
+ 040F  00 00 00 00 00 00 00	 db  000h,000h,000h,000h,000h,000h,000h,000h,00
+				0h,000h,000h,000h,000h    
+       00 00 00 00 00 00	
+				;prompt1_number dw 224 
+ 041C  0003			password_long dw 3              ;ÃÜÂë³¤¶È 
+ 041E  70 69 67 00		password db 'pig',0 ,10 dup(0)  ;ÃÜÂë´æ·Å´¦ 
+       000A[			
+	   00			
+			 ]	
+				
+ 042C  0014[			password_buf db 20 dup(0)       ; 
+	   00			
+			 ]	
+				
+				 
+ 0440  0E20			 cur_pos dw 0e20h        
+ 0442  0000			        number dw 0  
+ 0444  0000			      tmpdi dw 0 
+ 0446  00			      tmpal db 0 
+ 0447  0000			tmpip dw 0 
+ 0449  0000			tmpcs dw 0 
+				 
+				 
+				;************************************* 
+				                  ;  ±£´æµ½20H ÉÈÇø  ÄÚ´æµØÖ· :
+				 0000:8000h 
+				 
+				;**************************************** 
+				 
+				    
+				                
+				                
+ 044B				v1:                  ;hard disk boot from here!
+				 
+ 044B  B8 0000			                 mov ax,0 
+ 044E  8E D0			                 mov ss,ax 
+ 0450  8E D8			                 mov ds,ax 
+ 0452  8E C0			                 mov es,ax 
+ 0454  BC 7C00			                 mov sp,7c00h 
+ 0457  FB			                 sti 
+ 0458  B4 00			                mov ah,0 
+ 045A  B0 03			               	mov al,03h 
+ 045C  CD 10			               	int 10h      ;80*25 
+ 045E  B9 0200			                mov cx,200h 
+ 0461  BE 7C00			                mov si,7c00h 
+ 0464  BF 0600			                mov di,600h 
+ 0467  F3/ A4			                rep movsb 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-8
+
+
+ 0469  EA			                db 0eah 
+ 046A  0623 0000		                dw bb-v1+600h,0h 
+				 
+ 046E				          bb: 
+ 046E  B8 0600			                mov ax,0600h 
+				               
+ 0471  B7 00			                mov bh,00h 
+ 0473  B9 0000			                mov cx,0 
+				                
+ 0476  BA 2050			                mov dx,2050h 
+				                 
+ 0479  CD 10			                int 10h       ;ÇåÆÁ 
+				            ;***********************     
+				                ;********** 
+ 047B  B8 0201			                mov ax,0201h 
+ 047E  BB 8200					mov bx,8200h 
+ 0481  B9 0021					mov cx,0021h 
+ 0484  BA 0080					mov dx,80h 
+ 0487  CD 13			                int 13h      ;  £»µ÷×ÖÄ£µ½ÄÚ´æ1
+				 
+				 
+ 0489  B8 0202			                mov ax,0202h 
+ 048C  BB 8400			                mov bx,8400h    ;µ÷×ÖÄ£µ½ÄÚ´æ2 
+ 048F  B9 0022			                mov cx,22h 
+ 0492  BA 0080			                mov dx,80h 
+ 0495  CD 13			                int 13h 
+				            ;***************************** 
+				           ; the first begin 
+ 0497  B8 0000			           mov ax,0 
+ 049A  8E C0			           mov es,ax 
+ 049C  BD 8200			           mov bp,08200h 
+ 049F  B8 1100			           mov ax,1100h 
+ 04A2  B9 000E			           mov cx,14 
+ 04A5  B7 10			           mov bh,16 
+ 04A7  B3 00			           mov bl,0 
+ 04A9  BA 00D0			           mov dx,0d0h 
+ 04AC  CD 10			          int 10h          ;½«×ÖÄ£·ÀÈëBIOS 
+				      ;***************** 
+ 04AE  B4 02			        mov ah,2 
+ 04B0  B7 00			        mov bh,0 
+ 04B2  BA 0A18			         mov dx,0a18h 
+ 04B5  CD 10			         int 10h 
+ 04B7  2E: 89 16 8304		        mov word ptr cs:[8200h+cur_pos-prompt1]
+				,dx  
+ 04BC  B9 000E			        mov cx,14 
+ 04BF  B0 D0			        mov al,0d0h 
+				           
+ 04C1  51			    rx: push cx 
+ 04C2  B4 09			         mov ah,09h 
+ 04C4  B3 0A			          mov bl,0ah 
+ 04C6  B9 0001			         mov cx,1    
+ 04C9  CD 10			         int 10h 
+ 04CB  FE C0			         inc al 
+ 04CD  B4 02			         mov ah,2 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-9
+
+
+ 04CF  2E: 8B 16 8304		         mov dx,word  ptr cs:[8200h+cur_pos-pro
+				mpt1] 
+ 04D4  FE C2			         inc dl 
+ 04D6  2E: 89 16 8304		        mov word ptr cs:[8200h+cur_pos-prompt1]
+				,dx  
+				 
+				         
+ 04DB  CD 10			         int 10h 
+ 04DD  59			         pop cx 
+ 04DE  E2 E1			         loop rx            ;first end 
+				      ;********************************** 
+ 04E0  B8 0000			           mov ax,0 
+ 04E3  8E C0			           mov es,ax 
+ 04E5  BD 8400			           mov bp,08400h 
+ 04E8  B8 1100			           mov ax,1100h 
+ 04EB  B9 000C			           mov cx,12 
+ 04EE  B7 10			           mov bh,16 
+ 04F0  B3 00			           mov bl,0 
+ 04F2  BA 0090			           mov dx,090h 
+ 04F5  CD 10			          int 10h 
+				      ;***************** 
+ 04F7  B4 02			        mov ah,2 
+ 04F9  B7 00			        mov bh,0 
+ 04FB  BA 1738			         mov dx,01738h 
+ 04FE  CD 10			         int 10h 
+ 0500  2E: 89 16 8304		        mov word ptr cs:[8200h+cur_pos-prompt1]
+				,dx  
+ 0505  B9 000C			         mov cx,12 
+ 0508  B0 90			          mov al,090h 
+				           
+ 050A  51			      rx2: push cx 
+ 050B  B4 09			         mov ah,09h 
+ 050D  B3 9E			          mov bl,09eh 
+ 050F  B9 0001			         mov cx,1    
+ 0512  CD 10			         int 10h 
+ 0514  FE C0			         inc al 
+ 0516  B4 02			         mov ah,2 
+ 0518  2E: 8B 16 8304		         mov dx,word  ptr cs:[8200h+cur_pos-pro
+				mpt1] 
+ 051D  FE C2			         inc dl 
+ 051F  2E: 89 16 8304		        mov word ptr cs:[8200h+cur_pos-prompt1]
+				,dx  
+				         
+ 0524  CD 10			         int 10h 
+ 0526  59			         pop cx 
+ 0527  E2 E1			         loop rx2            
+				                                        
+				            ;*********************** 
+				;**************************************** 
+				 
+				 
+				 
+				 
+ 0529  B4 01			              mov ah,1 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-10
+
+
+ 052B  B5 13			              mov ch,19 
+ 052D  B1 00			              mov cl,0 
+ 052F  CD 10			              int 10h 
+				                             ;È¥µô¹â±ê 
+				;£»********************************* 
+				           
+ 0531					nv4: 
+				                 
+ 0531  B7 00					mov bh,0 
+ 0533  BA 0A28					mov dx,0a28h 
+ 0536  B4 02					mov ah,2 
+ 0538  CD 10			                int 10h       ; £»Éè¹â±ê 
+ 053A  B0 20			                mov al,20h 
+ 053C  BB 000A					mov bx,0ah 
+ 053F  B9 000C			                mov cx,12    
+ 0542  B4 09					mov ah,9 
+ 0544  CD 10					int 10h        ;Çå³ýÊäÈëµÄÃÜÂëÐ
+				ÇºÅ ¡®*¡¯ 
+						 
+ 0546  2E: C7 06 8306 0000	                mov word ptr cs:[8200h+number-p
+				rompt1],0  ;´æ·ÅÊäÈëµÄ×Ö·ûÊý 
+ 054D  BF 82F0					mov di,8200h+(password_buf-prom
+				pt1) 
+				                 
+ 0550				        nv1: 
+ 0550  2E: 89 3E 8308		                mov word ptr cs:[8200h+tmpdi-pr
+				ompt1],di 
+ 0555  B4 00			     getmsg:    mov ah,0 
+ 0557  CD 16			                int 16h 
+ 0559  3C 0D			                cmp al,0dh           ;°´ÏÂenter
+				 ¼ü 
+ 055B  74 34			                je nv2 
+ 055D  2E: FF 06 8306		                inc word ptr cs:[8200h+number-p
+				rompt1] 
+ 0562  2E: 83 3E 8306 0B	                cmp word ptr cs:[8200h+number-p
+				rompt1],11 
+ 0568  7D EB			                jge getmsg         ;ÊäÈë´ó¹ýÊ®¸
+				öÊ±²»¸É 
+ 056A  2E: A2 830A		                mov byte ptr cs:[8200h+tmpal-pr
+				ompt1],al 
+				 
+ 056E  B7 00			                mov bh,0 
+ 0570  BA 0A28					mov dx,0a28h 
+ 0573  B4 02					mov ah,2 
+ 0575  CD 10					int 10h 
+ 0577  B0 2A					mov al,'*' 
+ 0579  BB 000E			                mov bx,0eh 
+ 057C  2E: 8B 0E 8306		                mov cx,word ptr cs:[8200h+numbe
+				r-prompt1] 
+ 0581  B4 09					mov ah,9 
+ 0583  CD 10					int 10h 
+				 
+ 0585  2E: A0 830A		                mov al,byte ptr cs:[8200h+tmpal
+				-prompt1]           
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-11
+
+
+ 0589  2E: 8B 3E 8308		                mov di,word ptr cs:[8200h+tmpdi
+				-prompt1] 
+ 058E  AA			                stosb      ;½«ÊäÈë×Ö·û´æ´¢µ½ PA
+				SSWORD¡ª¡ªBUF 
+				                 
+ 058F  EB BF			                 jmp nv1 
+ 0591				   	nv2: 
+ 0591  2E: 8B 3E 82E0		              mov di,word ptr cs:[8200h+passwor
+				d_long-prompt1] 
+ 0596  2E: 3B 3E 8306		              cmp di,word ptr cs:[8200h+number-
+				prompt1] 
+ 059B  74 02			                je nv3 
+ 059D  EB 92			                jmp nv4 
+ 059F				          nv3: 
+				 
+ 059F  BF 82E2			                mov   di,8200h+(password-prompt
+				1) 
+ 05A2  BE 82F0			                mov si,8200h+(password_buf-prom
+				pt1) 
+ 05A5  FC			                cld 
+ 05A6  2E: 8B 0E 82E0		                mov cx, word ptr cs:[8200h+pass
+				word_long-prompt1] 
+ 05AB  F3/ A6			                repe cmpsb 
+ 05AD  74 02			                je boot 
+ 05AF  EB 80			                jmp nv4 
+				 
+ 05B1				 	boot: 
+ 05B1  B8 0600			                mov ax,0600h 
+				               
+ 05B4  B7 00			                mov bh,00h 
+ 05B6  B9 0000			                mov cx,0 
+				                
+ 05B9  BA 2050			                mov dx,2050h 
+				                 
+ 05BC  CD 10			                int 10h       ;ÇåÆÁ 
+				                ;********        here is ok! 
+				 
+				;**********************************************
+				** 
+ 05BE  BB 004C					mov bx,13h*4 
+ 05C1  2E: 8B 17		                mov dx,word ptr cs:[bx] 
+ 05C4  2E: 89 16 7DF3		                mov word ptr cs:[7c00h+ww-v1],d
+				x 
+ 05C9  2E: 8B 57 02		                mov dx,word ptr cs:[bx+2] 
+ 05CD  2E: 89 16 7DF5		                mov word ptr cs:[7c00h+ww-v1+2]
+				, dx 
+						;get intchar  
+ 05D2  2E: FF 0E 0413		                dec word ptr cs:[413h] 
+ 05D7  2E: FF 0E 0413		                dec word ptr  cs:[413h] 
+ 05DC  2E: A1 0413		                mov ax,word ptr cs:[413h] 
+ 05E0  B1 06					mov cl,6 
+ 05E2  D3 E0					shl ax,cl 
+							;dec the menory size 
+				;*********************** 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-12
+
+
+ 05E4  BB 004C					mov bx,13h*4		 
+				 
+ 05E7  2E: C7 07 0000				mov word ptr cs:[bx],0000h 
+ 05EC  2E: 89 47 02				mov word ptr cs:[bx+2],ax 
+						; set decnumber memory size 
+				 
+				;*************************  
+ 05F0  8E C0					mov es,ax	 
+ 05F2  B9 0200			                mov cx,200h 
+ 05F5  BE 7DDB 90				mov si,[7c00h+setint-v1] 
+ 05F9  BF 0000					mov di,0 
+ 05FC  F3/ A4					rep movsb 
+ 05FE  B8 0000					mov ax,0 
+ 0601  8E C0					mov es,ax 
+				 
+				 
+				        ;************************** 
+ 0603  B8 0201			                  mov ax,201h 
+ 0606  B9 0013			                  mov cx,13h 
+ 0609  BB 7000			                  mov bx,7000h 
+ 060C  BA 0080			                  mov dx,80h 
+ 060F  CD 13			                  int 13h 
+				 
+ 0611  BE 71BE			                 mov si,7000h+1beh 
+ 0614  8B 14			                 mov dx,word ptr [si] 
+ 0616  8B 4C 02			                 mov cx,word ptr [si+2] 
+ 0619  BB 7C00			                 mov bx,7c00h 
+ 061C  B8 0201			                 mov ax,0201h   ;¶ÁÈ¡DOS BOOT S
+				ECTOR c/h/s ²ÎÊý 
+ 061F  CD 13			                 int 13h               
+				 
+ 0621  EA			        	db 0eah 
+ 0622  7C00 0000		                dw 7c00h,0000h    
+						 
+				;************************** 
+ 0626				           setint:  
+				          
+ 0626  81 FA 0080		                cmp dx,0080h 
+ 062A  75 0D					jne xx 
+ 062C  83 F9 01					cmp cx,01h 
+ 062F  75 08					jne xx 
+ 0631  80 FC 02			                cmp ah,02h 
+ 0634  75 03			                jne xx 
+ 0636  B9 0013			                mov cx,13h 
+ 0639				        xx: 
+ 0639  2E: FF 2E 0018		               jmp dword ptr cs:[ww-setint] 
+ 063E  0000 0000		              ww dw 0,0 
+				               
+				 
+ 0642				       vv: 
+ = 0006				            fil equ 509-(vv-v1) 
+				 
+ 0642  0006[			                db fil dup (0) 
+	   00			
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-13
+
+
+			 ]	
+				
+ 0648  42			                db 'B' 
+ 0649  AA55			                dw 0aa55h 
+				;*********************** 
+ 064B				second: 
+ 064B  B8 0201			            MOV AX,0201H 
+ 064E  BB 06BC R				MOV BX,OFFSET BUF 
+ 0651  B9 0001					MOV CX,01H 
+ 0654  BA 0080					MOV DX,80H 
+ 0657  CD 13					INT 13H 
+ 0659  2E: 80 3E 08B9 R 42	                CMP CS:[BUF+01FdH],'B' 
+ 065F  74 4D			                JE install_yes 
+				;**************************************** 
+ 0661  2E: C6 06 08B9 R 42	                MOV CS:[BUF+01FdH],'B' 
+       90			
+ 0668  B8 0301			                MOV AX,0301H 
+ 066B  B9 0013					MOV CX,13H 
+ 066E  BB 06BC R		                mov bx,offset buf 
+ 0671  BA 0080			                mov dx,80h 
+ 0674  CD 13			                INT 13H 
+				;**************************************** 
+ 0676  B8 0301			             mov ax,301h 
+ 0679  BB 044B R		               mov bx,offset v1 
+ 067C  B9 0001			               mov cx,1 
+ 067F  BA 0080			               mov dx,80h 
+ 0682  CD 13			               int 13h        ;Ö÷Òýµ¼É½Çø save 
+				the edited master booter sector! 
+				 
+				;**************************************** 
+ 0684  B8 0301					MOV AX,301H 
+ 0687  BB 033C R				MOV BX,OFFSET PROMPT1 
+ 068A  B9 0021					MOV CX,21H 
+ 068D  BA 0080					MOV DX,80H 
+				;*************************************** 
+ 0690  B8 0302					MOV AX,302H 
+ 0693  BB 00BC R				MOV BX,OFFSET CPP 
+ 0696  B9 0022					MOV CX,22H 
+ 0699  BA 0080			                MOV DX,80H 
+ 069C  CD 13					INT 13H 
+				;**************************************** 
+							 
+				 
+ 069E				EXIT: 
+ 069E  8C C8			                mov ax,cs 
+ 06A0  8E D8			                mov ds,ax 
+ 06A2  8D 16 0906 R		                lea dx,msg2 
+ 06A6  B4 09			                mov ah,9 
+ 06A8  CD 21			                int 21h 
+ 06AA  B4 4C			                MOV AH,4CH 
+ 06AC  CD 21					INT 21H	 
+ 06AE				    install_yes: 
+ 06AE  8C C8			                  mov ax,cs 
+ 06B0  8E D8			                  mov ds,ax 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-14
+
+
+ 06B2  8D 16 08D2 R		                  lea dx,msg1 
+ 06B6  B4 09			                  mov ah,9 
+ 06B8  CD 21			                  int 21h 
+ 06BA  EB E2			                  jmp exit 
+				 
+ 06BC  0200[			   BUF db 512 dup(?) 
+	    ??			
+			 ]	
+				
+ 08BC  0014[			      para db 20 dup (0) 
+	   00			
+			 ]	
+				
+ 08D0  0000			     old_ds dw 0 
+ 08D2  20 20 20 20 20 20 20	     msg1 db '                 # This Program H
+				as Installed ! #',0dh,0ah,24h 
+       20 20 20 20 20 20 20	
+       20 20 20 23 20 54 68	
+       69 73 20 50 72 6F 67	
+       72 61 6D 20 48 61 73	
+       20 49 6E 73 74 61 6C	
+       6C 65 64 20 21 20 23	
+       0D 0A 24			
+ 0906  20 20 20 20 20 20 20	    msg2 db '           CopyRight Ver 1.0     P
+				rogramming By Z.Bin 98-11-7  ',0dh,0ah,30 dup (
+				20h) 
+       20 20 20 20 43 6F 70	
+       79 52 69 67 68 74 20	
+       56 65 72 20 31 2E 30	
+       20 20 20 20 20 50 72	
+       6F 67 72 61 6D 6D 69	
+       6E 67 20 42 79 20 5A	
+       2E 42 69 6E 20 39 38	
+       2D 31 31 2D 37 20 20	
+       0D 0A			
+       001E[			
+	   20			
+			 ]	
+				
+ 0965  53 65 65 20 59 6F 75	         db 'See You Later !',24h 
+       20 4C 61 74 65 72 20	
+       21 24			
+				 
+ 0975  20 20 20 20 20 20 20	     msg3 db '           I Cannot Unistall It !
+				 Because You Have Not Installed!',0dh,0ah,24h 
+       20 20 20 20 49 20 43	
+       61 6E 6E 6F 74 20 55	
+       6E 69 73 74 61 6C 6C	
+       20 49 74 20 21 20 42	
+       65 63 61 75 73 65 20	
+       59 6F 75 20 48 61 76	
+       65 20 4E 6F 74 20 49	
+       6E 73 74 61 6C 6C 65	
+       64 21 0D 0A 24		
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Page     1-15
+
+
+ 09B9  20 20 20 20 20 20 20	     msg4 db '           UnInstall Successful !
+				 Bye Bye ! ',0dh,0ah,24h 
+       20 20 20 20 55 6E 49	
+       6E 73 74 61 6C 6C 20	
+       53 75 63 63 65 73 73	
+       66 75 6C 20 21 20 42	
+       79 65 20 42 79 65 20	
+       21 20 0D 0A 24		
+				      
+				 
+ 09E8				             code ends 
+				              end first 
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+CODE . . . . . . . . . . . . . .  	09E8	PARA	NONE	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+BB . . . . . . . . . . . . . . .  	L NEAR	046E	CODE
+BEGIN  . . . . . . . . . . . . .  	L NEAR	00B2	CODE
+BOOT . . . . . . . . . . . . . .  	L NEAR	05B1	CODE
+BUF  . . . . . . . . . . . . . .  	L BYTE	06BC	CODE	Length = 0200
+
+CPP  . . . . . . . . . . . . . .  	L BYTE	00BC	CODE
+CUR_POS  . . . . . . . . . . . .  	L WORD	0440	CODE
+
+EXIT . . . . . . . . . . . . . .  	L NEAR	069E	CODE
+
+FIL  . . . . . . . . . . . . . .  	NUMBER	0006	
+FIRST  . . . . . . . . . . . . .  	L NEAR	0000	CODE
+
+GETMSG . . . . . . . . . . . . .  	L NEAR	0555	CODE
+
+INSTALL_YES  . . . . . . . . . .  	L NEAR	06AE	CODE
+
+LOOP1  . . . . . . . . . . . . .  	L NEAR	000F	CODE
+
+M1 . . . . . . . . . . . . . . .  	L NEAR	0019	CODE
+MSG1 . . . . . . . . . . . . . .  	L BYTE	08D2	CODE
+MSG2 . . . . . . . . . . . . . .  	L BYTE	0906	CODE
+MSG3 . . . . . . . . . . . . . .  	L BYTE	0975	CODE
+MSG4 . . . . . . . . . . . . . .  	L BYTE	09B9	CODE
+
+NUMBER . . . . . . . . . . . . .  	L WORD	0442	CODE
+NV1  . . . . . . . . . . . . . .  	L NEAR	0550	CODE
+NV2  . . . . . . . . . . . . . .  	L NEAR	0591	CODE
+NV3  . . . . . . . . . . . . . .  	L NEAR	059F	CODE
+NV4  . . . . . . . . . . . . . .  	L NEAR	0531	CODE
+
+OLD_DS . . . . . . . . . . . . .  	L WORD	08D0	CODE
+
+P1 . . . . . . . . . . . . . . .  	L NEAR	00AB	CODE
+P2 . . . . . . . . . . . . . . .  	L NEAR	008D	CODE
+P3 . . . . . . . . . . . . . . .  	L NEAR	009A	CODE
+PARA . . . . . . . . . . . . . .  	L BYTE	08BC	CODE	Length = 0014
+PASSWORD . . . . . . . . . . . .  	L BYTE	041E	CODE
+PASSWORD_BUF . . . . . . . . . .  	L BYTE	042C	CODE	Length = 0014
+PASSWORD_LONG  . . . . . . . . .  	L WORD	041C	CODE
+PROMPT1  . . . . . . . . . . . .  	L BYTE	033C	CODE
+
+RX . . . . . . . . . . . . . . .  	L NEAR	04C1	CODE
+RX2  . . . . . . . . . . . . . .  	L NEAR	050A	CODE
+Microsoft (R) Macro Assembler Version 5.00                  10/11/98 16:45:10
+                                                             Symbols-2
+
+
+
+SECOND . . . . . . . . . . . . .  	L NEAR	064B	CODE
+SETINT . . . . . . . . . . . . .  	L NEAR	0626	CODE
+
+T1 . . . . . . . . . . . . . . .  	L NEAR	0068	CODE
+T2 . . . . . . . . . . . . . . .  	L NEAR	001E	CODE
+T3 . . . . . . . . . . . . . . .  	L NEAR	0047	CODE
+TMPAL  . . . . . . . . . . . . .  	L BYTE	0446	CODE
+TMPCS  . . . . . . . . . . . . .  	L WORD	0449	CODE
+TMPDI  . . . . . . . . . . . . .  	L WORD	0444	CODE
+TMPIP  . . . . . . . . . . . . .  	L WORD	0447	CODE
+
+V1 . . . . . . . . . . . . . . .  	L NEAR	044B	CODE
+VV . . . . . . . . . . . . . . .  	L NEAR	0642	CODE
+
+WW . . . . . . . . . . . . . . .  	L WORD	063E	CODE
+
+XX . . . . . . . . . . . . . . .  	L NEAR	0639	CODE
+
+@FILENAME  . . . . . . . . . . .  	TEXT  hdd3		
+
+
+    502 Source  Lines
+    502 Total   Lines
+     49 Symbols
+
+  50796 + 399092 Bytes symbol space free
+
+      1 Warning Errors
+      0 Severe  Errors

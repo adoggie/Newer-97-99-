@@ -1,0 +1,49 @@
+// ZBin 99'
+void CMy0001Dlg::Draw_(CDC *dc,CRect * rc)
+{
+//	MessageBox("run");
+int repeat;
+CPen p[256];
+if (rc->Height()<256 )
+return ;
+	//MessageBox("run");
+
+repeat=(int)rc->Height()/255+1;
+CPoint  pt1(0,0),pt2(rc->Width(),0);
+for(int i=0 ;i<256;i++)
+	{
+		p[i].CreatePen(PS_SOLID,1,RGB( 0, 0,i));
+	}
+	for(i=0;i<256;i++)
+	{	
+		dc->SelectObject(&p[i]);
+			for(int j=0;j<repeat;j++)
+			{
+				dc->MoveTo(pt1);
+				dc->LineTo(pt2);
+				pt1.Offset(0,1);
+				pt2.Offset(0,1);
+			}
+	}
+
+
+
+
+}
+
+
+///////////////////////////////////////
+99-8-30
+
+TBBS_WRAPPED
+ShowControlBar(&m_wndPaletteBar, !bVisible, FALSE);
+
+//////////////////////99-9-12
+
+m_ofn.lpstrFilter = "Bitmaps (*.bmp)\0*.bmp\0"\
+                        "All Files (*.*)\0*.*\0\0";
+
+//////////////////
+DrawFocusRect(rect);
+
+/////////////////////

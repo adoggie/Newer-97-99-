@@ -1,0 +1,3 @@
+?srows()
+?scols()
+wait

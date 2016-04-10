@@ -1,0 +1,7 @@
+
+//======> ÀàËÆVBµÄSendKeys
+
+if(Key==VK_RETURN)
+    { SendMessage(this->Handle,WM_NEXTDLGCTL,0,0);
+        Key=0;
+    }

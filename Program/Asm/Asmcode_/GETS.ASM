@@ -1,0 +1,3 @@
+ .model tiny
+ .code
+

@@ -1,0 +1,62 @@
+
+/*
+
+¶ÁÈ¡ºº×Ö×ÖÄ£
+TC 2.0
+
+*/
+
+#define STRING "³ÌÐò: Z.Bin  CopyRight Ver 1.0 98-10-05"
+#define CHAR_BYTE 40
+#define OUTPUT_FILE "c:\\dat"
+#define SIZE CHAR_BYTE*16
+#include <stdio.h>
+#include <graphics.h>
+#include <conio.h>
+#include <stdlib.h>
+
+void  main()
+{
+    int At_x,color;
+    int g=0;int m;
+    int CharNumber;
+    int k;
+    int i,j;
+    char buf[SIZE];
+    char *p;
+    char a;
+    FILE *fp;
+    initgraph(&g,&m,"C:\TC");
+    p=buf;
+    if((fp=fopen(OUTPUT_FILE ,"wb"))==NULL)
+        return 0;
+    printf(STRING);
+    for(i=0;i<=223;i++)
+    {
+    buf[i]=0;
+    }
+    At_x=0;
+
+    for(CharNumber=0;CharNumber<CHAR_BYTE;CharNumber++)
+    {
+
+            for(j=0;j<=15;j++)
+              {
+                for(i=0;i<=7;i++)
+                {
+                    color=getpixel(At_x+i,j);
+                    if(color)
+                    {a=1; a=a<<(7-i);
+                      (*p)=(*p)|a;
+                    }
+                }
+            p++;
+             }
+    At_x+=8;
+    }
+    fwrite(buf,1,SIZE,fp);
+    fclose(fp);
+    /*getch();*/
+    closegraph();
+    return 0;
+}

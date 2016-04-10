@@ -1,0 +1,59 @@
+*****2000-05-09*********
+如何使程序保持极小状态? 
+
+在恢复程序窗体大小时， Windows会发送WM_QUERYOPEN消息， 
+
+Bool CMainFrame:: OnQueryOpen( ) 
+{ Return false; 
+} 
+// if return true,then restore this Window ,otherwise keep the status
+  cannot restore!
+********2000-05-20  c++ builder4.0
+得到应用程序的参数
+ParamCount() 的得到程序的执行参数个数不包括应用程序本身
+ParamStr(int index) 得到参数字符串
+ParamStr(0) 得到应用程序的路径
+
+******************
+对*.ini文件的操作有TIniFile  对象进行
+
+'Shell_TrayWnd' ---系统任务条的名称
+'Progman'
+
+启动屏幕保护 
+
+执行下列语句开始Windows屏幕保护程序
+SendMessage(HWND_BROADCAST,WM_SYSCOMMAND,SC_SCREENSAVE,0);
+
+程序不出现在任务栏 
+
+　　一般Windows 95运行程序时都会在任务栏上出现按钮，如果你的程序是一个监视程序，那么出现按钮就不是明智之举了。要实现该功能就要在OnCreate事件里利用到API函数SetWindowLong
+procedure TForm1.FormCreate(sender:TObject);
+begin
+SetWindowLong(Application,Handle,GWL_EXSTYLE,WS_EX_TOOLWINDOW);
+end;
+
+
+===========
+窗口名称：
+类名： Shell_TrayWnd 系统的托盘条
+      Progman   桌面  可隐藏桌面图标
+
+========== 2000-05-25
+WinInet.h  ----->进行Internet 编程，Ftp,Gropher,Http,Smtp;
+==================
+
+
+
+ 
+
+
+ 
+
+***** int && string  convert!
+ AnsiString IntToStr(int i)
+
+
+===================
+连接到窗口
+=========

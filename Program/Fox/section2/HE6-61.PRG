@@ -1,0 +1,2 @@
+SET TALK OFF
+RUN /N C:\WINDOWS\sol.exe

@@ -1,0 +1,268 @@
+            n.lst						Sourcer	v7.00   10-Oct-98  10:44 pm   Page 1
+
+
+				PAGE  59,132
+
+				;ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+				;ÛÛ					                                 ÛÛ
+				;ÛÛ				N	                                 ÛÛ
+				;ÛÛ					                                 ÛÛ
+				;ÛÛ      Created:   10-Oct-98		                                 ÛÛ
+				;ÛÛ      Passes:    5          Analysis	Options on: QRS                  ÛÛ
+				;ÛÛ					                                 ÛÛ
+				;ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+
+				.err     Target Assembler set to NONE, re-assembly not recommended
+
+
+				; The following equates show data references outside the range of the program.
+
+     = 061B			data_1e		equ	61Bh			;*(0000:061B=0)
+     = 7C1B			data_2e		equ	7C1Bh			;*(0000:7C1B=1)
+     = 06A1			data_6e		equ	6A1h			;*(944F:06A1=0)
+     = 0710			data_7e		equ	710h			;*(944F:0710=0)
+     = 7DFE			data_8e		equ	7DFEh			;*(944F:7DFE=0)
+     = AA55			data_9e		equ	0AA55h			;*(944F:AA55=0)
+
+				seg_a		segment	byte public
+						assume	cs:seg_a, ds:seg_a
+
+
+						org	100h
+
+				n		proc	far
+
+944F:0100			start:
+944F:0100  33 C0				xor	ax,ax			; Zero register
+944F:0102  8E D0				mov	ss,ax
+944F:0104  BC 7C00				mov	sp,7C00h
+944F:0107  FB					sti				; Enable interrupts
+944F:0108  50					push	ax
+944F:0109  07					pop	es
+944F:010A  50					push	ax
+944F:010B  1F					pop	ds
+944F:010C  FC					cld				; Clear direction
+944F:010D úBE 7C1B				mov	si,data_2e		; (0000:7C1B=1)
+944F:0110 úBF 061B				mov	di,data_1e		; (0000:061B=0)
+944F:0113  50					push	ax
+944F:0114  57					push	di
+944F:0115  B9 01E5				mov	cx,1E5h
+944F:0118  F3/ A4				rep	movsb			; Rep when cx >0 Mov [si] to es:[di]
+944F:011A  CB					retf				; Return far
+944F:011B  BE BE 07 B1 04			db	0BEh,0BEh, 07h,0B1h, 04h
+
+944F:0120			locloop_1:					;  xref 944F:0129
+944F:0120  38 2C				cmp	[si],ch
+944F:0122  7C 09				jl	loc_2			; Jump if <
+944F:0124  75 15				jnz	loc_4			; Jump if not zero
+944F:0126  83 C6 10				add	si,10h
+944F:0129  E2 F5				loop	locloop_1		; Loop if cx > 0
+           n.lst				Sourcer	v7.00   10-Oct-98  10:44 pm   Page 2
+
+
+944F:012B  CD 18				int	18h			; ROM basic
+944F:012D			loc_2:						;  xref 944F:0122
+944F:012D  8B 14				mov	dx,[si]
+944F:012F  8B EE				mov	bp,si
+944F:0131			loc_3:						;  xref 944F:0139
+944F:0131  83 C6 10				add	si,10h
+944F:0134  49					dec	cx
+944F:0135  74 16				jz	loc_8			; Jump if zero
+944F:0137  38 2C				cmp	[si],ch
+944F:0139  74 F6				je	loc_3			; Jump if equal
+944F:013B			loc_4:						;  xref 944F:0124
+944F:013B úBE 0710				mov	si,data_7e		; (944F:0710=0)
+944F:013E			loc_5:						;  xref 944F:0142
+944F:013E  4E					dec	si
+944F:013F			loc_6:						;  xref 944F:014B, 01BA
+944F:013F úAC					lodsb				; String [si] to al
+944F:0140  3C 00				cmp	al,0
+944F:0142  74 FA				je	loc_5			; Jump if equal
+944F:0144  BB 0007				mov	bx,7
+944F:0147  B4 0E				mov	ah,0Eh
+944F:0149  CD 10				int	10h			; Video display   ah=functn 0Eh
+										;  write char al, teletype mode
+944F:014B			loc_7:						;  xref 944F:01BF
+944F:014B úEB F2				jmp	short loc_6		; (013F)
+944F:014D			loc_8:						;  xref 944F:0135
+944F:014D  89 46 25				mov	[bp+25h],ax
+944F:0150  96					xchg	si,ax
+944F:0151  8A 46 04				mov	al,[bp+4]
+944F:0154  B4 06				mov	ah,6
+944F:0156  3C 0E				cmp	al,0Eh
+944F:0158  74 11				je	loc_10			; Jump if equal
+944F:015A  B4 0B				mov	ah,0Bh
+944F:015C  3C 0C				cmp	al,0Ch
+944F:015E  74 05				je	loc_9			; Jump if equal
+944F:0160  3A C4				cmp	al,ah
+944F:0162  75 2B				jne	loc_12			; Jump if not equal
+944F:0164  40					inc	ax
+944F:0165			loc_9:						;  xref 944F:015E
+944F:0165  C6 46 25 06				mov	byte ptr [bp+25h],6
+944F:0169  75 24				jnz	loc_12			; Jump if not zero
+944F:016B			loc_10:						;  xref 944F:0158
+944F:016B  BB 55AA				mov	bx,55AAh
+944F:016E  50					push	ax
+944F:016F  B4 41				mov	ah,41h
+944F:0171  CD 13				int	13h			; ??INT Non-standard interrupt
+944F:0173  58					pop	ax
+944F:0174  72 16				jc	loc_11			; Jump if carry Set
+944F:0176 ú81 FB AA55				cmp	bx,data_9e		; (944F:AA55=0)
+944F:017A  75 10				jne	loc_11			; Jump if not equal
+944F:017C  F6 C1 01				test	cl,1
+944F:017F  74 0B				jz	loc_11			; Jump if zero
+944F:0181  8A E0				mov	ah,al
+944F:0183  88 56 24				mov	[bp+24h],dl
+944F:0186  C7 06 06A1 1EEB			mov	word ptr ds:data_6e,1EEBh	; (944F:06A1=0)
+944F:018C			loc_11:						;  xref 944F:0174, 017A, 017F
+944F:018C  88 66 04				mov	[bp+4],ah
+           n.lst				Sourcer	v7.00   10-Oct-98  10:44 pm   Page 3
+
+944F:018F			loc_12:						;  xref 944F:0162, 0169
+944F:018F  BF 000A				mov	di,0Ah
+944F:0192			loc_13:						;  xref 944F:01B6, 01D8
+944F:0192 úB8 0201				mov	ax,201h
+944F:0195  8B DC				mov	bx,sp
+944F:0197  33 C9				xor	cx,cx			; Zero register
+944F:0199  83 FF 05				cmp	di,5
+944F:019C  7F 03				jg	loc_14			; Jump if >
+944F:019E  8B 4E 25				mov	cx,[bp+25h]
+944F:01A1			loc_14:						;  xref 944F:019C
+944F:01A1  03 4E 02				add	cx,[bp+2]
+944F:01A4  CD 13				int	13h			; Disk  dl=drive a  ah=func 02h
+										;  read sectors to memory es:bx
+										;   al=#,ch=cyl,cl=sectr,dh=head
+944F:01A6			loc_15:						;  xref 944F:01CF
+944F:01A6 ú72 29				jc	loc_17			; Jump if carry Set
+944F:01A8  BE 072D				mov	si,72Dh
+944F:01AB  81 3E 7DFE AA55			cmp	word ptr ds:data_8e,0AA55h	; (944F:7DFE=0)
+944F:01B1  74 5A				je	$+5Ch			; Jump if equal
+944F:01B3  83 EF 05				sub	di,5
+944F:01B6  7F DA				jg	loc_13			; Jump if >
+944F:01B8			loc_16:						;  xref 944F:01D2
+944F:01B8  85 F6				test	si,si
+944F:01BA  75 83				jnz	loc_6			; Jump if not zero
+944F:01BC  BE 071A				mov	si,71Ah
+944F:01BF  EB 8A				jmp	short loc_7		; (014B)
+							                        ;* No entry point to code
+944F:01C1  98					cbw				; Convrt byte to word
+944F:01C2  91					xchg	cx,ax
+944F:01C3  52					push	dx
+944F:01C4  99					cwd				; Word to double word
+944F:01C5  03 46 08				add	ax,[bp+8]
+944F:01C8  13 56 0A				adc	dx,[bp+0Ah]
+944F:01CB  E8 0012				call	sub_1			; (01E0)
+944F:01CE  5A					pop	dx
+944F:01CF  EB D5				jmp	short loc_15		; (01A6)
+944F:01D1			loc_17:						;  xref 944F:01A6
+944F:01D1  4F					dec	di
+944F:01D2  74 E4				jz	loc_16			; Jump if zero
+944F:01D4  33 C0				xor	ax,ax			; Zero register
+944F:01D6  CD 13				int	13h			; Disk  dl=drive a  ah=func 00h
+										;  reset disk, al=return status
+944F:01D8  EB B8				jmp	short loc_13		; (0192)
+944F:01DA  00 00 80 08 27 18			db	 00h, 00h, 80h, 08h, 27h, 18h
+
+				n		endp
+
+				;ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß
+				;                              SUBROUTINE
+				;
+				;         Called from:   944F:01CB
+				;ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ
+
+944F:01E0			sub_1		proc	near
+944F:01E0  56					push	si
+944F:01E1  33 F6				xor	si,si			; Zero register
+944F:01E3  56					push	si
+           n.lst				Sourcer	v7.00   10-Oct-98  10:44 pm   Page 4
+
+944F:01E4  56					push	si
+944F:01E5  52					push	dx
+944F:01E6  50					push	ax
+944F:01E7  06					push	es
+944F:01E8  53					push	bx
+944F:01E9  51					push	cx
+944F:01EA  BE 0010				mov	si,10h
+944F:01ED  56					push	si
+944F:01EE  8B F4				mov	si,sp
+944F:01F0  50					push	ax
+944F:01F1  52					push	dx
+944F:01F2  B8 4200				mov	ax,4200h
+944F:01F5  8A 56 24				mov	dl,[bp+24h]
+944F:01F8  CD 13				int	13h			; ??INT Non-standard interrupt
+944F:01FA  5A					pop	dx
+944F:01FB  58					pop	ax
+944F:01FC  8D 64 10				lea	sp,[si+10h]		; Load effective addr
+944F:01FF  72 0A				jc	loc_20			; Jump if carry Set
+
+944F:0201			locloop_18:					;  xref 944F:0208
+944F:0201  40					inc	ax
+944F:0202  75 01				jnz	loc_19			; Jump if not zero
+944F:0204  42					inc	dx
+944F:0205			loc_19:						;  xref 944F:0202
+944F:0205  80 C7 02				add	bh,2
+944F:0208  E2 F7				loop	locloop_18		; Loop if cx > 0
+
+944F:020A  F8					clc				; Clear carry flag
+944F:020B			loc_20:						;  xref 944F:01FF
+944F:020B  5E					pop	si
+944F:020C  C3					retn
+				sub_1		endp
+
+							                        ;* No entry point to code
+944F:020D  EB 74				jmp	short $+76h
+							                        ;* No entry point to code
+944F:020F  B7 D6				mov	bh,0D6h
+944F:0211  C7 F8 B1 ED CE DE			db	0C7h,0F8h,0B1h,0EDh,0CEh,0DEh
+944F:0217  D0 A7 00 BC D3 D4			db	0D0h,0A7h, 00h,0BCh,0D3h,0D4h
+944F:021D  D8 B2 D9 D7 F7 CF			db	0D8h,0B2h,0D9h,0D7h,0F7h,0CFh
+944F:0223  B5 CD B3 CA B1 B3			db	0B5h,0CDh,0B3h,0CAh,0B1h,0B3h
+944F:0229  F6 B4 ED 00				db	0F6h,0B4h,0EDh, 00h
+944F:022D  4D 69 73 73 69 6E			db	'Missing operating system'
+944F:0233  67 20 6F 70 65 72
+944F:0239  61 74 69 6E 67 20
+944F:023F  73 79 73 74 65 6D
+944F:0245  003E[00]				db	62 dup (0)
+944F:0283  8B FC 1E 57 8B F5			db	 8Bh,0FCh, 1Eh, 57h, 8Bh,0F5h
+944F:0289  CB					db	0CBh
+944F:028A  0034[00]				db	52 dup (0)
+944F:02BE  80 01 01 00 06 3F			db	 80h, 01h, 01h, 00h, 06h, 3Fh
+944F:02C4  7F 63 3F 00 00 00			db	 7Fh, 63h, 3Fh, 00h, 00h, 00h
+944F:02CA  C1 E6 15 00 00 00			db	0C1h,0E6h, 15h, 00h, 00h, 00h
+944F:02D0  41 64 0F 3F FF 29			db	 41h, 64h, 0Fh, 3Fh,0FFh, 29h
+944F:02D6  00 E7 15 00 40 FE			db	 00h,0E7h, 15h, 00h, 40h,0FEh
+944F:02DC  1B 00				db	 1Bh, 00h
+944F:02DE  0020[00]				db	32 dup (0)
+           n.lst				Sourcer	v7.00   10-Oct-98  10:44 pm   Page 5
+
+944F:02FE  55 AA				db	 55h,0AAh
+
+				seg_a		ends
+
+
+
+						end	start
+           n.lst				Sourcer	v7.00   10-Oct-98  10:44 pm   Page 6
+
+
+				±±±±±±±±±±±±±±±±±±±± CROSS REFERENCE - KEY ENTRY POINTS ±±±±±±±±±±±±±±±±±±±
+
+				    seg:off    type	   label
+				   ---- ----   ----   --------------------------------
+				   944F:0100   far    start
+
+				 ±±±±±±±±±±±±±±±±±± Interrupt Usage Synopsis ±±±±±±±±±±±±±±±±±±
+
+				        Interrupt 10h : Video display	ah=functn xxh
+				        Interrupt 10h :  ah=0Eh	 write char al, teletype mode
+				        Interrupt 13h : Disk  dl=drive #  ah=func xxh
+				        Interrupt 13h :  ah=00h	 reset disk, al=return status
+				        Interrupt 13h :  ah=02h	 read sectors to memory es:bx
+				        Interrupt 18h : ROM basic
+				            2 Ocurrences of non-standard interrupts used (search for ??).
+
+				 ±±±±±±±±±±±±±±±±±± I/O Port Usage Synopsis  ±±±±±±±±±±±±±±±±±±
+
+				        No I/O ports used.
+
